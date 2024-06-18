@@ -13,6 +13,9 @@ createWeb3Modal({
   projectId,
   enableAnalytics: false,
   enableOnramp: false,
+  themeVariables: {
+    '--w3m-border-radius-master': '0px',
+  },
 })
 
 export default function Web3ModalProvider({ children, initialState }) {
