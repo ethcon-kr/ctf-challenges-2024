@@ -4,7 +4,6 @@ pragma solidity ^0.8.26;
 contract Airdrop {
     address private _owner;
     uint256 totalDrop;
-
     mapping(address user => bool isDone) public done;
     mapping(address user => uint256 balance) public balances;
     mapping(address user => uint256 claimed) public claimed;
@@ -28,7 +27,7 @@ contract Airdrop {
         balances[msg.sender] = 0;
     }
 
-    function buyFlag(address buyer) external payable {
+    function buyFlag(address buyer) external {
         require(flag[buyer] == false, "already bought flag");
         require(claimed[msg.sender] == 10 wei, "not enought to buy flag");
         claimed[msg.sender] = 0;
@@ -40,5 +39,6 @@ contract Airdrop {
         selfdestruct(payable(_owner));
     }
 
+    receive() external payable {}
     fallback() external payable {}
 }
