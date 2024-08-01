@@ -7,7 +7,7 @@ contract Obscurity {
     function buyFlag(bytes calldata password) external payable {
         uint8 char;
         uint8 key = uint8(uint160(msg.sender) & 0xFF);
-        require(password.length != 30, "Invalid Password");
+        require(password.length == 30, "Invalid Password");
         char = uint8(password[0]);
         require(char ^ key == 84, "Invalid Password");
         char = uint8(password[1]);
