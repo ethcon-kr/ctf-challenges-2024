@@ -2,18 +2,15 @@
 pragma solidity ^0.8.26;
 
 contract MyContract {
-    bytes public key;
+    uint256 public key;
     mapping(address user => bool hasFlag) public flag;
 
     constructor() {
-        key = abi.encode(block.timestamp % 1000000);
+        key = uint256(keccak256(abi.encode(block.timestamp % 1000000)));
     }
 
     modifier onlyContract() {
-        require(
-            tx.origin != msg.sender && isContract(msg.sender),
-            "Only contract can call this function"
-        );
+        require(tx.origin != msg.sender && isContract(msg.sender), "Only contract can call this function");
         _;
     }
 
@@ -25,10 +22,7 @@ contract MyContract {
         return (size > 0);
     }
 
-    function compare(
-        bytes memory a,
-        bytes memory b
-    ) private pure returns (bool) {
+    function compare(bytes memory a, bytes memory b) private pure returns (bool) {
         if (a.length != b.length) {
             return false;
         }
@@ -41,8 +35,8 @@ contract MyContract {
     }
 
     function buyFlag(address user, uint256 key_) external onlyContract {
-        require(compare(abi.encode(key_ % 1000000), key), "Incorrect key");
-        key = abi.encode(block.timestamp % 1000000);
+        require(uint256(keccak256(abi.encode(key_))) == key, "Incorrect key");
+        key = uint256(keccak256(abi.encode(block.timestamp % 1000000)));
         flag[user] = true;
     }
 }
