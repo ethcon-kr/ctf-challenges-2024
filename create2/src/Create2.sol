@@ -1,11 +1,14 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.26;
+pragma solidity =0.8.27;
 
 contract Create2 {
     mapping(address user => bool hasFlag) public flag;
 
     modifier onlyContract() {
-        require(tx.origin != msg.sender && isContract(msg.sender), "only contract can call this function");
+        require(
+            tx.origin != msg.sender && isContract(msg.sender),
+            "only contract can call this function"
+        );
         _;
     }
 

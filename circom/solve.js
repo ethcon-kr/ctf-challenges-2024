@@ -18,7 +18,7 @@ while (!existsSync('input.json')) {
     writeFileSync('input.json', JSON.stringify({ secret1, secret2 }))
 }
 
-const circom = '0x12d2e3bfa22fd4275ddf19c2d99b934a93a342cf'
+const circom = '0xa63b62469f1b2d9b73045b8ec455b02a1371f657'
 
 spawn('circom2 calcme.circom --sym --wasm')
 spawn('snarkjs wc calcme_js/calcme.wasm input.json witness.wtns')

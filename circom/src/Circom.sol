@@ -1,10 +1,13 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.26;
+pragma solidity =0.8.27;
 
 interface IVerifier {
-    function verifyProof(uint256[2] calldata, uint256[2][2] calldata, uint256[2] calldata, uint256[1] calldata)
-        external
-        returns (bool);
+    function verifyProof(
+        uint256[2] calldata,
+        uint256[2][2] calldata,
+        uint256[2] calldata,
+        uint256[1] calldata
+    ) external returns (bool);
 }
 
 contract Circom {
@@ -21,7 +24,10 @@ contract Circom {
         uint256[2][2] memory pB;
         uint256[2] memory pC;
         uint256[1] memory pubSignals;
-        (pA, pB, pC, pubSignals) = abi.decode(proof, (uint256[2], uint256[2][2], uint256[2], uint256[1]));
+        (pA, pB, pC, pubSignals) = abi.decode(
+            proof,
+            (uint256[2], uint256[2][2], uint256[2], uint256[1])
+        );
         require(_usedHashes[pubSignals[0]] == false, "proof already used");
         require(_verifier.verifyProof(pA, pB, pC, pubSignals), "invalid proof");
         _usedHashes[pubSignals[0]] = true;

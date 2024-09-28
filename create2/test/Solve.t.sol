@@ -1,10 +1,13 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.26;
+pragma solidity =0.8.27;
 
 import {Test, console} from "forge-std/Test.sol";
 
 contract Solve is Test {
-    function calc(bytes memory seed, bytes memory code) private view returns (address addr) {
+    function calc(
+        bytes memory seed,
+        bytes memory code
+    ) private view returns (address addr) {
         address self = address(this);
         bytes32 hash = keccak256(code);
         bytes32 salt = keccak256(seed);

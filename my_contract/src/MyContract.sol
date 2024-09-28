@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.26;
+pragma solidity =0.8.27;
 
 contract MyContract {
     uint256 public key;
@@ -10,7 +10,10 @@ contract MyContract {
     }
 
     modifier onlyContract() {
-        require(tx.origin != msg.sender && isContract(msg.sender), "Only contract can call this function");
+        require(
+            tx.origin != msg.sender && isContract(msg.sender),
+            "Only contract can call this function"
+        );
         _;
     }
 

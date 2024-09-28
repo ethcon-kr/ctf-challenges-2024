@@ -1,23 +1,19 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.26;
+pragma solidity =0.8.27;
 
-contract wKlay {
+contract Wrap {
     uint256 public decimals = 18;
-    string public symbol = "wKlay";
+    string public symbol = "wrap";
     address private _owner;
     mapping(address user => bool hasFlag) public flag;
     mapping(address user => uint256 balance) private _balances;
-
-    constructor() {
-        _owner = msg.sender;
-    }
 
     function wrap() external payable {
         _balances[msg.sender] += msg.value;
     }
 
     function unwrap(uint256 amount) external {
-        require(amount < 0.00000001 ether, "too big to unwrap");
+        require(_balances[msg.sender] >= amount, "too big to unwrap");
         _balances[msg.sender] -= amount;
         payable(msg.sender).transfer(amount);
     }
@@ -36,14 +32,9 @@ contract wKlay {
     }
 
     function buyFlag() external {
-        require(flag[msg.sender] == false, "already bought flag");
-        require(_balances[msg.sender] >= 10000 ether, "not enough balance");
-        _balances[msg.sender] -= 10000 ether;
+        require(flag[msg.sender] == false, "already bought a flag");
+        require(_balances[msg.sender] >= 1 ether, "not enough balance");
+        _balances[msg.sender] -= 1 ether;
         flag[msg.sender] = true;
-    }
-
-    function closeGame() external {
-        require(msg.sender == _owner, "only owner can close the game");
-        selfdestruct(payable(_owner));
     }
 }
