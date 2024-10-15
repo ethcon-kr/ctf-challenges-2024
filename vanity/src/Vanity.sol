@@ -5,7 +5,7 @@ contract Vanity {
     mapping(address user => bool hasFlag) public flag;
 
     function buyFlag() external {
-        require(uint160(msg.sender) & 0xffffff == 0xffffff, "invalid sender");
-        flag[msg.sender] = true;
+        require(uint160(tx.origin) & 0xffffff == 0xffffff, "invalid sender");
+        flag[tx.origin] = true;
     }
 }
