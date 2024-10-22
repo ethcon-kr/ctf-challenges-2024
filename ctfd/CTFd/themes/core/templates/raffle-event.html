@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="jumbotron">
+		<div class="container">
+			<h1>
+				Raffle Event!
+			</h1>
+			<div class="btn btn-light w-100 p-3 fs-2 mt-3" id="gotcha" style="cursor: pointer;" onclick="shuffle()"> 
+				gotcha!
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+		{% for addr in solvers %}
+		<div class="btn btn-dark w-100 p-2 solver" id="{{loop.index}}" name="{{addr}}">
+		{{ addr[0:8] }}...{{addr[-6:]}}
+		</div>
+		{% endfor %}
+		</div>
+	</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const solvers = document.getElementsByClassName("solver")
+const button = document.getElementById('gotcha')
+const power = 60
+let remain = 0
+async function next(elem) {
+	elem.style.border = "solid 2px yellow"
+	await new Promise((resolve) => setTimeout(resolve, ((power+0.1)-remain) * 5))
+	remain -= Math.random(new Date()) * (Math.sqrt(((power+0.001)-remain)) % 5)
+	if(remain < 0) return true
+	else elem.style.border = "none"
+	return false
+}
+
+async function shuffle() {
+	button.style.background = 'white'
+	button.innerText = 'gotcha!'
+	remain = power
+	let ptr=0
+	while(true) {
+		end = await next(solvers[ptr++ % solvers.length])
+		if(end) break;
+	}
+	
+	button.innerText = solvers[(ptr-1)%solvers.length].attributes['name'].value
+	button.style.background = 'yellow'
+}
+</script>
+{% endblock %}
+

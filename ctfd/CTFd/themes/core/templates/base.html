@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ Configs.ctf_name }}</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css"
+    />
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/highlightjs-solidity@2.0.6/dist/solidity.min.js"
+    ></script>
+    <link
+      rel="shortcut icon"
+      href="{{ Configs.ctf_small_icon }}"
+      type="image/x-icon"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('views.themes', path='css/fonts.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('views.themes', path='css/main.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('views.themes', path='css/core.css') }}"
+    />
+    {% block stylesheets %} {% endblock %}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cute+Font&family=Orbitron:wght@400..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style id="theme-color">
+
+      :root {
+          --theme-color: #101D25;
+          background-color: var(--theme-color);
+      }
+
+      main {
+          margin-bottom: 0px;
+      }
+
+      .table {
+          color: white;
+          border-color: white;
+      }
+
+      .container, body, html, p {
+          font-family: "Orbitron", sans-serif;
+          font-optical-sizing: auto;
+          font-weight: 400;
+          font-style: normal;
+      }
+
+      .tab-content {
+          color: black;
+      }
+
+      .footer {
+          position: relative;
+      }
+
+      body:after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          z-index: -1;
+          background-color: var(--theme-color);
+      !important;
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-attachment: fixed;
+      }
+
+      .navbar {
+          background-color: var(--theme-color) !important;
+          font-size: 12px;
+      }
+
+      .jumbotron {
+          background-color: var(--theme-color) !important;
+          padding: 1rem
+      }
+
+      body {
+          color: white;
+          background-color: transparent;
+      }
+
+      .footer {
+      / / background-color: #12364E;
+          margin-top: 1rem;
+          background-color: var(--theme-color);
+      }
+
+      #challenge-solves-names {
+          color: black;
+      }
+
+      .card-body {
+          color: black;
+      }
+
+        .text-color {
+          color: #91C3E8;
+      }
+
+      #user-search-input {
+          display: flex;
+          flex-direction: row;
+          flex-grow: 1;
+          width: auto;
+          border-radius: 2px;
+          padding: 0 0;
+          background: var(--sub-container-color) !important;
+          &:after {
+              content: "";
+              position: absolute;
+              left: 0px;
+              right: 0px;
+              bottom: 0px;
+              z-index: 999;
+              height: 2px;
+              border-bottom-left-radius: 2px;
+              border-bottom-right-radius: 2px;
+              background-position: 0% 0%;
+              background: linear-gradient(to right, #1F99AB, #4A3990, #5B2E5B);
+              background-size: 500% auto;
+              animation: gradient 3s linear infinite;
+          }
+      }
+
+      #user-search-input input {
+          flex-grow: 1;
+          background: transparent;
+          width: auto !important;
+          color: #83ADBF;
+          border-color: transparent;
+          box-shadow: none;
+          transition: none;
+          border-radius: 2px;
+          &::-webkit-input-placeholder {
+              color: #4E6A76;
+              opacity: 1;
+          }
+      }
+
+      #user-search-input:focus {
+          border-color: transparent;
+          box-shadow: 0 2px #B294FF, 0 -2px #FEFFB8;
+          transition: none;
+      }
+
+      #user-search-input button {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background: transparent;
+          border: none;
+          width: auto !important;
+          font-size: 2.4rem;
+          line-height: 2.4rem;
+          vertical-align: middle;
+          transition: color .25s;
+      }
+
+      #user-search-input button i {
+          background: transparent;
+          margin: auto 0;
+          font-size: 23px;
+          color: #4E6A76;
+          &:hover {
+            color: #83ADBF;
+          }
+      }
+
+      #user-search-select select {
+          background: var(--sub-container-color) !important;
+          border-color: #25384D;
+          border-width: 3px;
+          border-radius: 5px;
+          box-shadow: none;
+          transition: none;
+          color: #83ADBF;
+          text-align: center;
+          font-size: 15px;
+      }
+    </style>
+
+    {{ Plugins.styles }}
+    <script type="text/javascript">
+      var init = {
+      	'urlRoot': "{{ request.script_root }}",
+      	'csrfNonce': "{{ Session.nonce }}",
+      	'userMode': "{{ Configs.user_mode }}",
+      	'userId': {{ Session.id }},
+      	'userName': {{ User.name | tojson }},
+      	'userEmail': {{ User.email | tojson }},
+      	'teamId': {{ Team.id | tojson }},
+      	'teamName': {{ Team.name | tojson }},
+      	'start': {{ Configs.start | tojson }},
+      	'end': {{ Configs.end | tojson }},
+      	'theme_settings': {{ Configs.theme_settings | tojson }}
+      }
+    </script>
+    {{ Configs.theme_header }}
+  </head>
+  <body>
+    {% include "components/navbar.html" %}
+
+    <main role="main">{% block content %} {% endblock %}</main>
+
+    <footer class="footer">
+      <div class="container text-center">
+        <a href="https://ctfd.io" class="text-secondary">
+          <small class="text-muted">Powered by CTFd</small>
+        </a>
+      </div>
+    </footer>
+    <script
+      defer
+      src="{{ url_for('views.themes', path='js/vendor.bundle.js') }}"
+    ></script>
+    <script
+      defer
+      src="{{ url_for('views.themes', path='js/core.js') }}"
+    ></script>
+    <script
+      defer
+      src="{{ url_for('views.themes', path='js/helpers.js') }}"
+    ></script>
+
+    {% block entrypoint %}
+    <script
+      defer
+      src="{{ url_for('views.themes', path='js/pages/main.js') }}"
+    ></script>
+    {% endblock %} {% block scripts %} {% endblock %} {{ Plugins.scripts }} {{
+    Configs.theme_footer }}
+  </body>
+</html>

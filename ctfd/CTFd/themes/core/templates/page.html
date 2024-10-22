@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+	main {
+		margin-bottom: 0;
+	}
+
+	canvas.bg {
+		position: absolute;
+		left: 0;
+		width: 100%;
+		height: calc(100vh - 56px); {# screenH - navbarH #}
+	}
+
+	canvas.hero {
+		position: absolute;
+		left: 0;
+		width: 100%;
+		height: calc(100vh - 56px);
+	}
+
+	p {
+		position: fixed;
+		left: 0;
+		bottom: 5px;
+		color: #fff;
+		z-index: 10;
+		font-size: 16px;
+		font-family: Helvetica, Verdana, sans-serif;
+		opacity: 0.5;
+		width: 100%;
+		text-align: center;
+		margin: 0;
+	}
+</style>
+
+<div id="container" class="container">
+	<canvas id="bg" class="bg"></canvas>
+	<canvas id="hero" class="hero"></canvas>
+	<div id="mobile" class="text-center" style="color: #ff94f9; position: absolute; left: 0; top: calc(50vh - 1em); font-size: 2em; display: none; width: 100%; font-weight: bold;">
+		<div class="mb-3">ETHCON 2024</div>
+		<div>Capture The Flag</div>
+	</div>
+</div>
+<script>
+	var canvas_hero = document.querySelector("#hero"),
+		ctx_hero = canvas_hero.getContext("2d"),
+		particles = [],
+		amount = 0,
+		mouse = {x: 0, y: 0},
+		radius = 1;
+
+	if (window.innerWidth <= 430) {
+		document.querySelector('#hero').style.display = 'none'
+		document.querySelector('#mobile').style.display = 'block'
+		setInterval(() => {
+			document.querySelector('#mobile').style.opacity = Math.random()
+		}, 139)
+	}
+	var colors = ["#de46b4", "#362b64", "#24e6ff", "#6a46db", "#eaecfe"];
+
+	var ww = canvas_hero.width;
+	var wh = canvas_hero.height;
+
+	function Particle(x, y) {
+		this.x = Math.random() * ww;
+		this.y = Math.random() * wh;
+		this.dest = {
+			x: x,
+			y: y
+		};
+		this.r = window.innerWidth > 430 ? 10 : 4;
+		this.vx = 0;
+		this.vy = 0;
+		this.accX = 0;
+		this.accY = 0;
+		this.friction = 0.95;
+
+		this.color = colors[Math.floor(Math.random() * colors.length)];
+	}
+
+	Particle.prototype.render = function () {
+
+
+		this.accX = (this.dest.x - this.x) / 1000;
+		this.accY = (this.dest.y - this.y) / 1000;
+		this.vx += this.accX;
+		this.vy += this.accY;
+		this.vx *= this.friction;
+		this.vy *= this.friction;
+
+		this.x += this.vx;
+		this.y += this.vy;
+
+		ctx_hero.fillStyle = this.color;
+		ctx_hero.beginPath();
+		ctx_hero.rect(this.x, this.y, this.r, this.r, false);
+		ctx_hero.fill();
+
+		var a = this.x - mouse.x;
+		var b = this.y - mouse.y;
+
+		var distance = Math.sqrt(a * a + b * b);
+		if (distance < (150)) {
+			this.accX = (this.x - mouse.x) / 50;
+			this.accY = (this.y - mouse.y) / 50;
+			this.vx += this.accX;
+			this.vy += this.accY;
+		}
+
+	}
+
+	function onMouseMove(e) {
+		mouse.x = e.clientX - canvas_hero.offsetLeft;
+		mouse.y = e.clientY - canvas_hero.offsetTop;
+	}
+
+	function onTouchMove(e) {
+		if (e.touches.length > 0) {
+			mouse.x = e.touches[0].clientX;
+			mouse.y = e.touches[0].clientY;
+		}
+	}
+
+	function onTouchEnd(e) {
+		mouse.x = -9999;
+		mouse.y = -9999;
+	}
+
+	function initScene() {
+		ww = canvas_hero.width = window.innerWidth;
+		wh = canvas_hero.height = window.innerHeight;
+
+		ctx_hero.clearRect(0, 0, canvas_hero.width, canvas_hero.height);
+
+		const fontScale = window.innerWidth > 430 ? 0.8 : window.innerWidth / 430
+		ctx_hero.font = "bold " + (ww / 10 / 16 * fontScale) + "em Orbitron";
+		ctx_hero.textAlign = "center";
+		ctx_hero.fillText('ETHCON 2024', ww / 2, wh / 2);
+		ctx_hero.fillText('Capture The Flag', ww / 2, wh / 2 + 140);
+
+		var data = ctx_hero.getImageData(0, 100, ww, wh).data;
+		ctx_hero.clearRect(0, 0, canvas_hero.width, canvas_hero.height);
+		ctx_hero.globalCompositeOperation = "screen";
+
+		particles = [];
+		const particleGap = window.innerWidth > 430 ? 150 : 100
+		for (var i = 0; i < ww; i += Math.round(ww / particleGap)) {
+			for (var j = 0; j < wh; j += Math.round(ww / particleGap)) {
+				if (data[((i + j * ww) * 4) + 3] > particleGap) {
+					particles.push(new Particle(i, j));
+				}
+			}
+		}
+		amount = particles.length;
+
+	}
+
+	function onMouseClick() {
+		radius++;
+		if (radius === 5) {
+			radius = 0;
+		}
+	}
+
+	function render(a) {
+		requestAnimationFrame(render);
+		ctx_hero.clearRect(0, 0, canvas_hero.width, canvas_hero.height);
+		for (var i = 0; i < amount; i++) {
+			particles[i].render();
+		}
+	}
+
+	window.addEventListener("resize", initScene);
+	window.addEventListener("mousemove", onMouseMove);
+	window.addEventListener("touchmove", onTouchMove);
+	window.addEventListener("click", onMouseClick);
+	window.addEventListener("touchend", onTouchEnd);
+	initScene();
+	requestAnimationFrame(render);
+</script>
+<script>
+	var canvas_bg = document.querySelector('#bg'),
+		ctx_bg = canvas_bg.getContext('2d');
+
+	// Setting the width and height of the canvas
+	canvas_bg.width = window.innerWidth;
+	canvas_bg.height = window.innerHeight;
+
+
+	// Setting up the letters
+	var letters = 'ABCDEFGHIJKLMNOPQRSTUVXYZABCDEFGHIJKLMNOPQRSTUVXYZABCDEFGHIJKLMNOPQRSTUVXYZABCDEFGHIJKLMNOPQRSTUVXYZABCDEFGHIJKLMNOPQRSTUVXYZABCDEFGHIJKLMNOPQRSTUVXYZ';
+	letters = letters.split('');
+
+	// Setting up the columns
+	var fontSize = 16,
+		columns = canvas_bg.width / fontSize;
+
+	// Setting up the drops
+	var drops = [];
+	for (var i = 0; i < columns; i++) {
+		drops[i] = 1;
+	}
+
+	// Setting up the draw function
+	function draw() {
+		ctx_bg.fillStyle = 'rgb(16,29,37, 0.3)';
+		ctx_bg.fillRect(0, 0, canvas_bg.width, canvas_bg.height);
+		for (var i = 0; i < drops.length; i++) {
+			var text = letters[Math.floor(Math.random() * letters.length)];
+			ctx_bg.fillStyle = '#ea37e7';
+			ctx_bg.fillText(text, i * fontSize, drops[i] * fontSize);
+			drops[i]++;
+			if (drops[i] * fontSize > canvas_bg.height && Math.random() > .95) {
+				drops[i] = 0;
+			}
+		}
+	}
+
+	// Loop the animation
+	setInterval(draw, 33);
+</script>
+
+{% endblock %}

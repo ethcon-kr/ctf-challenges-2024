@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="jumbotron">
+		<div class="container">
+			<h1>
+				Login
+			</h1>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 col offset-md-2 col-lg-6 offset-lg-3 text-center">
+				<button id="loginButton" class="btn btn-block btn-primary w-75" style="width: 200px;"
+						onclick="window.signIn()" disabled>
+					<div class="spinner-border spinner-border-sm text-light" role="status">
+						<span class="sr-only">Await Wallet...</span>
+					</div>
+					Await Wallet...
+				</button>
+				<div class="mt-3">to participate the challenge, please connect wallet.</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
